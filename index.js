@@ -7,8 +7,8 @@ const router = express.Router();
 - add <h1> tag with message "Welcome to ExpressJs Tutorial"
 - Return home.html page to client
 */
-router.get('/home', (req,res) => {
-  res.send('This is home router');
+router.get('/home', (req, res) => {
+  res.sendFile('home.html', { root: __dirname }); 
 });
 
 /*
