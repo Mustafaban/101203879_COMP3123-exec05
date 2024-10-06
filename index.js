@@ -47,12 +47,12 @@ router.get('/profile', (req, res) => {
     }
 */
 router.post('/login', (req, res) => {
-  const { username, password } = req.body; // Extract username and password
+  const { username, password } = req.body; 
 
-  // Assuming user data is stored in an object within user.json
+  
   fs.readFile('user.json', (err, data) => {
     if (err) {
-      // Handle error reading file (refer to error handling section)
+      
       return;
     }
     const users = JSON.parse(data);
