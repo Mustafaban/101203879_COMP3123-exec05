@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 const fs = require('fs');
+app.use(express.json());
 
 /*
 - Create new html file name home.html 
@@ -46,19 +47,26 @@ router.get('/profile', (req, res) => {
     }
 */
 router.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  fs.readFile('user.json', 'utf8', (err, data) => {
-      if (err) {
-          return res.status(500).json({ message: 'Error reading user data' });
-      }
-      const user = JSON.parse(data);
-      if (user.username !== username) {
-          return res.json({ status: false, message: "User Name is invalid" });
-      }
-      if (user.password !== password) {
-          return res.json({ status: false, message: "Password is invalid" });
-      }
-      return res.json({ status: true, message: "User Is valid" });
+  const { username, password } = req.body; // Extract username and password
+
+  // Assuming user data is stored in an object within user.json
+  fs.readFile('user.json', (err, data) => {
+    if (err) {
+      // Handle error reading file (refer to error handling section)
+      return;
+    }
+    const users = JSON.parse(data);
+    const user = users.find(u => u.username === username);
+
+    if (!user) {
+      return res.json({ status: false, message: "User Name is invalid" });
+    }
+
+    if (user.password !== password) {
+      return res.json({ status: false, message: "Password is invalid" });
+    }
+
+    res.json({ status: true, message: "User Is valid" });
   });
 });
 
@@ -67,8 +75,10 @@ router.post('/login', (req, res) => {
 - Modify /logout route to accept username as parameter and display message
     in HTML format like <b>${username} successfully logout.<b>
 */
-router.get('/logout', (req,res) => {
-  res.send('This is logout router');
+router.get('/logout', (req, res) => {
+  const username = req.query.username; 
+  const message = `<b>${username} successfully logged out.</b>`;
+  res.send(message); 
 });
 
 /*
