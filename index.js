@@ -45,9 +45,23 @@ router.get('/profile', (req, res) => {
         message: "Password is invalid"
     }
 */
-router.post('/login', (req,res) => {
-  res.send('This is login router');
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  fs.readFile('user.json', 'utf8', (err, data) => {
+      if (err) {
+          return res.status(500).json({ message: 'Error reading user data' });
+      }
+      const user = JSON.parse(data);
+      if (user.username !== username) {
+          return res.json({ status: false, message: "User Name is invalid" });
+      }
+      if (user.password !== password) {
+          return res.json({ status: false, message: "Password is invalid" });
+      }
+      return res.json({ status: true, message: "User Is valid" });
+  });
 });
+
 
 /*
 - Modify /logout route to accept username as parameter and display message
