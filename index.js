@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
+const fs = require('fs');
 
 /*
 - Create new html file name home.html 
@@ -14,8 +15,15 @@ router.get('/home', (req, res) => {
 /*
 - Return all details from user.json file to client as JSON format
 */
-router.get('/profile', (req,res) => {
-  res.send('This is profile router');
+
+router.get('/profile', (req, res) => {
+  fs.readFile('user.json', (err, data) => {
+    if (err) {
+      return;
+    }
+    const userData = JSON.parse(data);
+    res.json(userData);
+  });
 });
 
 /*
