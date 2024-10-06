@@ -85,12 +85,7 @@ router.get('/logout', (req, res) => {
 Add error handling middleware to handle below error
 - Return 500 page with message "Server Error"
 */
-app.use((err,req,res,next) => {
-  res.send('This is error router');
+app.use((err, req, res, next) => {
+  console.error(err.stack); 
+  res.status(500).send('Server Error'); 
 });
-
-app.use('/', router);
-
-app.listen(process.env.port || 8081);
-
-console.log('Web Server is listening at port '+ (process.env.port || 8081));
